@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+   <div id="app">
+	<v-app id="inspire">
+		<v-data-table
+		  :headers="headers"
+		  :items="data_json"
+		  :items-per-page="50"
+		  class="elevation-1"
+		></v-data-table>
+	</v-app>
+  </div>
+
+  <script src="https://yastatic.net/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <!-- <script src="./data_file.json"></script> -->
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+	  name: 'LayoutsDemosBaselineFlipped',
+	  props: {
+		  source: String,
+		},
+	  data: () => ({
+		headers: [
+        {
+          text: 'Объявления',
+          align: 'title',
+          sortable: false,
+          value: 'name',
+        },
+        { text: 'Calories', value: 'calories' },
+        { text: 'Fat (g)', value: 'fat' },
+        { text: 'Carbs (g)', value: 'carbs' },
+        { text: 'Protein (g)', value: 'protein' },
+        { text: 'Iron (%)', value: 'iron' },
+       ],
+	   data_json: [],
+
+	  }),
+	  methods: {
+        loadJSON(callback) {
+
+            var xobj = new XMLHttpRequest();
+            xobj.overrideMimeType("application/json");
+            xobj.open('GET', './data_file.json', true)
+            xobj.onreadystatechange = function () {
+                if (xobj.readyState == 4 && xobj.status == "200") {
+                    // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+                    callback(xobj.responseText);
+                }
+            };
+            xobj.send(null);
+        },
+        init() {
+            let that = this
+            that.loadJSON(function (response) {
+                // Parse JSON string into object
+                var data = JSON.parse(response);
+                that.data_json = data.messages
+            });
+        }
+    },
+	 mounted () {
+		//  this.arrayEvents = [...Array(6)].map(() => {
+		//   const day = Math.floor(Math.random() * 30)
+		//   const d = new Date()
+		//   d.setDate(day)
+		//   return d.toISOString().substr(0, 10)
+	  	//  })
+		//  console.log(this.arrayEvents);
+		 //this.curentYear = 2019
+
+		//  async fetch("data_file.json")
+ 		// 	 .then(response => response.json())
+  		// 	 .then(json => data_json = json);
+
+		//  $.getJSON('data_file.json', function(data) {
+		// 	data_json = data;
+		// });
+
+		//data_json = data_file
+
+			// const file = await fileHandle.getFile();
+			// data_json = await file.text();
+
+			// const loadFromJSON = async () => {
+			// const blob = await fileOpen({
+			// 	description: "Excalidraw files",
+			// 	extensions: ["json", "excalidraw"],
+			// 	mimeTypes: ["application/json"],
+			// });
+			// console.log(blob);
+			// return loadFromBlob(blob);
+			// };
+
+			// var requestURL = './data_file.json';
+			// var request = new XMLHttpRequest();
+			// request.open('GET', requestURL);
+			
+			this.init()
+
+
+
+	   },	
+	
+    })
+  </script>
+</body>
+</html>
